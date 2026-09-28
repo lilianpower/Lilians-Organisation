@@ -15,45 +15,61 @@ const BR = LOCALE.toLowerCase() === 'pt-br';
 const STRINGS = {
   pt: {
     install: 'Instalar',
-    iosHint: `Para instalar: toca em <strong>Partilhar</strong> ⬆️ e depois <strong>${BR ? 'Adicionar à Tela de Início' : 'Adicionar ao ecrã principal'}</strong>.`,
-    placeholder: 'Escreve qualquer coisa… ex: comprar leite, dentista amanhã às 10h',
+    iosHint: `Para instalar: toque em <strong>Compartilhar</strong> ⬆️ e depois em <strong>${BR ? 'Adicionar à Tela de Início' : 'Adicionar ao ecrã principal'}</strong>.`,
+    placeholder: 'Escreva qualquer coisa… ex: dentista amanhã às 10h, comprar leite',
+    placeholderDay: 'Adicionar neste dia… ex: reunião 14h, pagar conta',
     add: 'Adicionar',
     search: 'Procurar…',
-    export: 'Guardar cópia',
-    import: 'Restaurar cópia',
+    export: 'Fazer backup',
+    import: 'Restaurar backup',
     clearDone: 'Limpar concluídos',
     all: 'Tudo',
-    empty: 'Escreve algo em cima para começar ✨',
+    empty: 'Escreva algo acima para começar ✨',
     nothing: 'Nada aqui.',
-    changeCat: 'Toca para mudar de categoria',
+    dayEmpty: 'Nada marcado para este dia. Escreva acima para adicionar ✨',
+    changeCat: 'Toque para mudar de categoria',
     delete: 'Apagar',
     confirmDelete: 'Apagar isto?',
     confirmClear: (n) => `Apagar ${n} concluído(s)?`,
-    restored: 'Cópia restaurada ✔',
-    badFile: 'Este ficheiro não parece ser uma cópia válida.',
+    restored: 'Backup restaurado ✔',
+    badFile: 'Este arquivo não parece ser um backup válido.',
     today: 'Hoje', tomorrow: 'Amanhã', late: 'Atrasado',
-    offline: 'offline', syncing: 'a sincronizar…', synced: 'sincronizado', syncError: 'erro', notShared: 'partilhar',
-    syncIntro: 'Partilha esta lista com outra pessoa (ou outro aparelho). O que um escreve aparece no outro — mesmo que um esteja sem internet, junta-se tudo quando voltar a ligação.',
-    createShared: 'Criar lista partilhada',
-    haveCode: 'Ou, se recebeste um código:',
-    codePlaceholder: 'Cola aqui o código',
-    join: 'Juntar',
+    viewDay: '📅 Dia', viewMonth: '🗓️ Mês', viewList: '🗂️ Lista',
+    goToday: 'Voltar para hoje',
+    lateTitle: '⚠️ Atrasados',
+    undatedTitle: '✅ Para fazer (sem data)',
+    fText: 'O quê', fDate: 'Dia', fTime: 'Horário', fCat: 'Categoria', fNote: 'Anotações',
+    save: 'Salvar', cancel: 'Cancelar',
+    offline: 'offline', syncing: 'sincronizando…', synced: 'sincronizado', syncError: 'erro', notShared: 'compartilhar',
+    syncIntro: 'Compartilhe esta agenda com outra pessoa (ou outro aparelho). O que um escreve aparece no outro — mesmo sem internet, tudo se junta quando a conexão voltar.',
+    createShared: 'Criar agenda compartilhada',
+    haveCode: 'Ou, se você recebeu um código:',
+    codePlaceholder: 'Cole o código aqui',
+    join: 'Entrar',
     code: 'Código:',
     invite: 'Enviar convite',
     leave: 'Parar de sincronizar',
-    confirmLeave: 'Parar de sincronizar neste aparelho? A lista fica guardada aqui, mas deixa de receber alterações.',
-    confirmSwitch: 'Juntar a esta lista partilhada? O que tens aqui também vai para lá.',
-    badCode: 'Esse código não parece certo. Confirma se copiaste tudo.',
+    confirmLeave: 'Parar de sincronizar neste aparelho? A agenda continua salva aqui, mas deixa de receber alterações.',
+    confirmSwitch: 'Entrar nesta agenda compartilhada? O que você tem aqui também vai para lá.',
+    badCode: 'Esse código não parece certo. Confira se copiou tudo.',
     lastSync: (t) => `✓ Sincronizado às ${t}`,
     notYet: 'Ainda não sincronizou (sem internet?)',
-    inviteText: (link, code) => `Junta-te à minha lista no Organizar 💜\n\nAbre este link: ${link}\n\nOu, na app, toca em 🔄 e cola este código: ${code}`,
-    copied: 'Convite copiado — cola-o numa mensagem.',
+    inviteText: (link, code) => `Entre na minha agenda do Organizar 💜\n\nAbra este link: ${link}\n\nOu, no app, toque em 🔄 e cole este código: ${code}`,
+    copied: 'Convite copiado — cole numa mensagem.',
   },
   en: {
     install: 'Install',
     iosHint: 'To install: tap <strong>Share</strong> ⬆️ then <strong>Add to Home Screen</strong>.',
     placeholder: 'Type anything… e.g. buy milk, dentist tomorrow at 10am',
     add: 'Add',
+    placeholderDay: 'Add to this day… e.g. meeting 2pm, pay bill',
+    dayEmpty: 'Nothing planned for this day. Type above to add ✨',
+    viewDay: '📅 Day', viewMonth: '🗓️ Month', viewList: '🗂️ List',
+    goToday: 'Back to today',
+    lateTitle: '⚠️ Overdue',
+    undatedTitle: '✅ To do (no date)',
+    fText: 'What', fDate: 'Day', fTime: 'Time', fCat: 'Category', fNote: 'Notes',
+    save: 'Save', cancel: 'Cancel',
     search: 'Search…',
     export: 'Save a copy',
     import: 'Restore a copy',
@@ -150,6 +166,23 @@ let items = load();
 let activeTab = 'todos';
 let query = '';
 
+function startOfDay(d) {
+  const x = new Date(d);
+  x.setHours(0, 0, 0, 0);
+  return x.getTime();
+}
+function addDaysTo(ms, n) {
+  const d = new Date(ms);
+  d.setDate(d.getDate() + n);
+  return d.getTime();
+}
+
+const VIEW_KEY = 'lo.view';
+let view = 'dia';
+try { view = localStorage.getItem(VIEW_KEY) || 'dia'; } catch { /* sem armazenamento */ }
+let selDay = startOfDay(new Date());
+let monthCursor = new Date(new Date(selDay).getFullYear(), new Date(selDay).getMonth(), 1);
+
 const live = () => items.filter((i) => !i.deleted);
 
 // ---------- organizar automaticamente ----------
@@ -194,8 +227,30 @@ function detectDue(text) {
   return null;
 }
 
+// Encontra um horário no texto: "14h", "14h30", "às 10", "10:30", "3pm", "at 9".
+function extractTime(text) {
+  const t = normalize(text);
+  let m = t.match(/(^|[^\d/])(\d{1,2})(?::|h)(\d{2})(?!\d)/)
+    || t.match(/(^|[^\d/])(\d{1,2})\s?(?:h|hs|horas?)(?![a-z])()/)
+    || t.match(/(^|\s)(?:as|at)\s(\d{1,2})(?::(\d{2}))?(?![\d/])/);
+  let pm = false;
+  if (!m) {
+    m = t.match(/(^|[^\d/])(\d{1,2})(?::(\d{2}))?\s?(am|pm)\b/);
+    pm = !!m && m[4] === 'pm';
+  } else {
+    const ap = t.slice(m.index + m[0].length).match(/^\s?(am|pm)\b/);
+    pm = !!ap && ap[1] === 'pm';
+  }
+  if (!m) return null;
+  let h = +m[2];
+  const min = m[3] ? +m[3] : 0;
+  if (pm && h < 12) h += 12;
+  if (h > 23 || min > 59) return null;
+  return `${String(h).padStart(2, '0')}:${String(min).padStart(2, '0')}`;
+}
+
 function hasTime(text) {
-  return /\b\d{1,2}(:\d{2})?\s?(h|am|pm)\b|\bas \d{1,2}\b|\bat \d{1,2}\b/.test(normalize(text));
+  return !!extractTime(text);
 }
 
 function categorize(text) {
@@ -229,17 +284,27 @@ function changed() {
   syncSoon();
 }
 
+// Nas vistas Dia e Mês, o que se escreve sem data vai para o dia escolhido.
 function addItem(rawText) {
   const text = rawText.trim();
   if (!text) return;
   const now = Date.now();
-  const due = detectDue(text);
+  const onAgenda = view !== 'lista';
+  const due = detectDue(text) || (onAgenda ? new Date(selDay) : null);
+  const time = extractTime(text);
+  let category = categorize(text);
+  if (!/#\w+/.test(text)) {
+    if (due && time && category !== 'compras') category = 'compromissos';
+    else if (onAgenda && category === 'notas') category = 'tarefas';
+  }
   items.unshift({
     id: uid(),
     text: text.replace(/#\w+\s*/g, '').trim() || text,
-    category: categorize(text),
+    category,
     done: false,
     due: due ? due.getTime() : null,
+    time,
+    note: '',
     createdAt: now,
     updatedAt: now,
   });
@@ -356,7 +421,6 @@ const $ = (id) => document.getElementById(id);
 function applyStrings() {
   document.documentElement.lang = LANG;
   document.querySelectorAll('[data-i18n]').forEach((el) => { el.textContent = T[el.dataset.i18n]; });
-  $('input').placeholder = T.placeholder;
   $('search').placeholder = T.search;
   $('codeInput').placeholder = T.codePlaceholder;
   $('iosHint').innerHTML = T.iosHint;
@@ -376,11 +440,28 @@ function formatDue(ms) {
 function sortItems(list) {
   return list.slice().sort((a, b) => {
     if (a.done !== b.done) return a.done ? 1 : -1;
-    if (a.due && b.due) return a.due - b.due;
-    if (a.due) return -1;
-    if (b.due) return 1;
+    if (a.due && b.due && a.due !== b.due) return a.due - b.due;
+    if (a.due && !b.due) return -1;
+    if (b.due && !a.due) return 1;
+    if (a.time || b.time) return (a.time || '99') < (b.time || '99') ? -1 : 1;
     return b.createdAt - a.createdAt;
   });
+}
+
+// Itens de um dia: primeiro os com horário (por ordem), depois os sem horário; feitos no fim.
+function itemsOnDay(dayMs) {
+  const end = addDaysTo(dayMs, 1);
+  return sortItems(live().filter((i) => i.due && i.due >= dayMs && i.due < end));
+}
+
+function formatTime(hhmm) {
+  if (!hhmm) return '';
+  const [h, m] = hhmm.split(':').map(Number);
+  return new Date(2000, 0, 1, h, m).toLocaleTimeString(LOCALE, { hour: '2-digit', minute: '2-digit' });
+}
+
+function longDate(ms) {
+  return new Date(ms).toLocaleDateString(LOCALE, { weekday: 'long', day: 'numeric', month: 'long' });
 }
 
 function renderStatus() {
@@ -421,7 +502,7 @@ function renderTabs() {
   }
 }
 
-function renderItem(item) {
+function renderItem(item, { showDue = true } = {}) {
   const cat = CATEGORIES.find((c) => c.id === item.category) || CATEGORIES[4];
   const el = document.createElement('div');
   el.className = 'item' + (item.done ? ' done' : '');
@@ -436,8 +517,16 @@ function renderItem(item) {
   const text = document.createElement('div');
   text.className = 'text';
   text.textContent = item.text;
+  text.onclick = () => openEdit(item.id);
   const meta = document.createElement('div');
   meta.className = 'meta';
+
+  if (item.time) {
+    const time = document.createElement('span');
+    time.className = 'time';
+    time.textContent = `🕒 ${formatTime(item.time)}`;
+    meta.appendChild(time);
+  }
 
   const catBtn = document.createElement('button');
   catBtn.className = 'cat';
@@ -447,11 +536,18 @@ function renderItem(item) {
   catBtn.onclick = () => updateItem(item.id, { category: nextCategory(item.category) });
   meta.appendChild(catBtn);
 
-  if (item.due) {
+  if (item.due && showDue) {
     const due = document.createElement('span');
     due.className = 'due';
     due.textContent = formatDue(item.due);
     meta.appendChild(due);
+  }
+  if (item.note) {
+    const note = document.createElement('span');
+    note.className = 'noteMark';
+    note.textContent = '📝';
+    note.title = item.note;
+    meta.appendChild(note);
   }
   body.append(text, meta);
 
@@ -466,40 +562,191 @@ function renderItem(item) {
   return el;
 }
 
-function render() {
+function section(list, title, entries, opts, className = '') {
+  if (!entries.length) return;
+  const sec = document.createElement('section');
+  sec.className = 'group ' + className;
+  if (title) {
+    const h = document.createElement('h2');
+    h.textContent = title;
+    sec.appendChild(h);
+  }
+  entries.forEach((i) => sec.appendChild(renderItem(i, opts)));
+  list.appendChild(sec);
+}
+
+function emptyMessage(list, text) {
+  const p = document.createElement('p');
+  p.className = 'empty';
+  p.textContent = text;
+  list.appendChild(p);
+}
+
+function renderDayItems(list, dayMs) {
+  const today = startOfDay(new Date());
+  const dayItems = itemsOnDay(dayMs);
+  if (dayItems.length) section(list, '', dayItems, { showDue: false });
+  else emptyMessage(list, T.dayEmpty);
+
+  // No dia de hoje também aparece o que ficou para trás e o que não tem data.
+  if (dayMs === today) {
+    const late = sortItems(live().filter((i) => !i.done && i.due && i.due < today));
+    section(list, T.lateTitle, late, { showDue: true }, 'late');
+    const undated = sortItems(live().filter((i) => !i.done && !i.due && i.category === 'tarefas'));
+    section(list, T.undatedTitle, undated, { showDue: false });
+  }
+}
+
+function renderDay() {
+  const today = startOfDay(new Date());
+  $('dayTitle').textContent = selDay === today ? `${T.today} · ${longDate(selDay)}` : longDate(selDay);
+  $('todayBtn').hidden = selDay === today;
+  renderDayItems($('list'), selDay);
+}
+
+function renderMonth() {
+  const y = monthCursor.getFullYear();
+  const m = monthCursor.getMonth();
+  $('monthTitle').textContent = monthCursor.toLocaleDateString(LOCALE, { month: 'long', year: 'numeric' });
+
+  const grid = $('monthGrid');
+  grid.innerHTML = '';
+  // Brasil e EUA começam a semana no domingo; Portugal e Reino Unido na segunda.
+  const weekStart = ['pt-BR', 'en-US'].includes(LOCALE) ? 0 : 1;
+  for (let i = 0; i < 7; i++) {
+    const wd = document.createElement('div');
+    wd.className = 'wd';
+    wd.textContent = new Date(2024, 0, 7 + ((i + weekStart) % 7))
+      .toLocaleDateString(LOCALE, { weekday: 'narrow' });
+    grid.appendChild(wd);
+  }
+  const blanks = (new Date(y, m, 1).getDay() - weekStart + 7) % 7;
+  for (let i = 0; i < blanks; i++) {
+    const b = document.createElement('div');
+    b.className = 'cell blank';
+    grid.appendChild(b);
+  }
+  const today = startOfDay(new Date());
+  const daysInMonth = new Date(y, m + 1, 0).getDate();
+  for (let d = 1; d <= daysInMonth; d++) {
+    const ms = new Date(y, m, d).getTime();
+    const dayItems = itemsOnDay(ms);
+    const cell = document.createElement('button');
+    cell.type = 'button';
+    cell.className = 'cell' + (ms === today ? ' today' : '') + (ms === selDay ? ' sel' : '');
+    const num = document.createElement('span');
+    num.textContent = d;
+    const dots = document.createElement('span');
+    dots.className = 'dots';
+    dayItems.slice(0, 4).forEach((i) => {
+      const dot = document.createElement('i');
+      if (i.done) dot.className = 'off';
+      dots.appendChild(dot);
+    });
+    cell.append(num, dots);
+    cell.onclick = () => { selDay = ms; render(); };
+    // Dois toques num dia abrem a vista desse dia.
+    cell.ondblclick = () => { selDay = ms; setView('dia'); };
+    grid.appendChild(cell);
+  }
+
+  $('selDayTitle').textContent = longDate(selDay);
+  renderDayItems($('list'), selDay);
+}
+
+function renderList() {
   renderTabs();
   const list = $('list');
-  list.innerHTML = '';
-
   const q = normalize(query);
   const all = live();
   const visible = all.filter((i) =>
-    (activeTab === 'todos' || i.category === activeTab) && (!q || normalize(i.text).includes(q)));
+    (activeTab === 'todos' || i.category === activeTab)
+    && (!q || normalize(i.text + ' ' + (i.note || '')).includes(q)));
 
-  if (!visible.length) {
-    const p = document.createElement('p');
-    p.className = 'empty';
-    p.textContent = all.length ? T.nothing : T.empty;
-    list.appendChild(p);
-    return;
-  }
+  if (!visible.length) { emptyMessage(list, all.length ? T.nothing : T.empty); return; }
 
   if (activeTab === 'todos') {
     for (const cat of CATEGORIES) {
-      const group = sortItems(visible.filter((i) => i.category === cat.id));
-      if (!group.length) continue;
-      const section = document.createElement('section');
-      section.className = 'group';
-      const h = document.createElement('h2');
-      h.textContent = `${cat.emoji} ${catLabel(cat)}`;
-      section.appendChild(h);
-      group.forEach((i) => section.appendChild(renderItem(i)));
-      list.appendChild(section);
+      section(list, `${cat.emoji} ${catLabel(cat)}`, sortItems(visible.filter((i) => i.category === cat.id)));
     }
   } else {
-    sortItems(visible).forEach((i) => list.appendChild(renderItem(i)));
+    section(list, '', sortItems(visible));
   }
 }
+
+function setView(v) {
+  view = v;
+  try { localStorage.setItem(VIEW_KEY, v); } catch { /* sem armazenamento */ }
+  render();
+}
+
+function render() {
+  document.querySelectorAll('#views button').forEach((b) => b.classList.toggle('active', b.dataset.view === view));
+  $('dayHead').hidden = view !== 'dia';
+  $('month').hidden = view !== 'mes';
+  $('tabs').hidden = view !== 'lista';
+  $('search').hidden = view !== 'lista';
+  $('input').placeholder = view === 'lista' ? T.placeholder : T.placeholderDay;
+  $('list').innerHTML = '';
+  if (view === 'dia') renderDay();
+  else if (view === 'mes') renderMonth();
+  else renderList();
+}
+
+// ---------- editar um item (data, horário, anotações) ----------
+
+let editingId = null;
+
+function toInputDate(ms) {
+  const d = new Date(ms);
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+}
+
+function openEdit(id) {
+  const item = items.find((i) => i.id === id);
+  if (!item) return;
+  editingId = id;
+  $('fText').value = item.text;
+  $('fDate').value = item.due ? toInputDate(item.due) : '';
+  $('fTime').value = item.time || '';
+  $('fCat').innerHTML = '';
+  for (const c of CATEGORIES) {
+    const o = document.createElement('option');
+    o.value = c.id;
+    o.textContent = `${c.emoji} ${catLabel(c)}`;
+    $('fCat').appendChild(o);
+  }
+  $('fCat').value = item.category;
+  $('fNote').value = item.note || '';
+  $('editDlg').showModal();
+}
+
+$('editForm').addEventListener('submit', () => {
+  const [y, mo, d] = $('fDate').value.split('-').map(Number);
+  updateItem(editingId, {
+    text: $('fText').value.trim() || '…',
+    due: $('fDate').value ? new Date(y, mo - 1, d).getTime() : null,
+    time: $('fTime').value || null,
+    category: $('fCat').value,
+    note: $('fNote').value.trim(),
+  });
+});
+$('fCancel').addEventListener('click', () => $('editDlg').close());
+$('fDelete').addEventListener('click', () => {
+  if (!confirm(T.confirmDelete)) return;
+  $('editDlg').close();
+  deleteItem(editingId);
+});
+
+document.querySelectorAll('#views button').forEach((b) => {
+  b.textContent = T[{ dia: 'viewDay', mes: 'viewMonth', lista: 'viewList' }[b.dataset.view]];
+  b.onclick = () => setView(b.dataset.view);
+});
+$('prevDay').onclick = () => { selDay = addDaysTo(selDay, -1); render(); };
+$('nextDay').onclick = () => { selDay = addDaysTo(selDay, 1); render(); };
+$('todayBtn').onclick = () => { selDay = startOfDay(new Date()); render(); };
+$('prevMonth').onclick = () => { monthCursor = new Date(monthCursor.getFullYear(), monthCursor.getMonth() - 1, 1); render(); };
+$('nextMonth').onclick = () => { monthCursor = new Date(monthCursor.getFullYear(), monthCursor.getMonth() + 1, 1); render(); };
 
 // ---------- ligar os botões ----------
 

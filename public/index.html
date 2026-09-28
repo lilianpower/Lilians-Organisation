@@ -48,16 +48,59 @@
     </div>
   </section>
 
+  <nav id="views" class="views">
+    <button type="button" data-view="dia"></button>
+    <button type="button" data-view="mes"></button>
+    <button type="button" data-view="lista"></button>
+  </nav>
+
   <form id="addForm" class="add" autocomplete="off">
     <textarea id="input" rows="2"></textarea>
     <button type="submit" data-i18n="add"></button>
   </form>
+
+  <div id="dayHead" class="dayhead">
+    <button type="button" id="prevDay" class="arrow" aria-label="‹">‹</button>
+    <div class="dayTitle">
+      <strong id="dayTitle"></strong>
+      <button type="button" id="todayBtn" class="link" data-i18n="goToday"></button>
+    </div>
+    <button type="button" id="nextDay" class="arrow" aria-label="›">›</button>
+  </div>
+
+  <section id="month" class="month">
+    <div class="dayhead">
+      <button type="button" id="prevMonth" class="arrow" aria-label="‹">‹</button>
+      <div class="dayTitle"><strong id="monthTitle"></strong></div>
+      <button type="button" id="nextMonth" class="arrow" aria-label="›">›</button>
+    </div>
+    <div id="monthGrid" class="grid"></div>
+    <h2 id="selDayTitle" class="selDay"></h2>
+  </section>
 
   <nav id="tabs" class="tabs"></nav>
 
   <input id="search" class="search" type="search">
 
   <main id="list" class="list"></main>
+
+  <dialog id="editDlg" class="edit">
+    <form method="dialog" id="editForm">
+      <label><span data-i18n="fText"></span><textarea id="fText" rows="2"></textarea></label>
+      <div class="row">
+        <label><span data-i18n="fDate"></span><input id="fDate" type="date"></label>
+        <label><span data-i18n="fTime"></span><input id="fTime" type="time"></label>
+      </div>
+      <label><span data-i18n="fCat"></span><select id="fCat"></select></label>
+      <label><span data-i18n="fNote"></span><textarea id="fNote" rows="4"></textarea></label>
+      <div class="row actions">
+        <button type="button" id="fDelete" class="secondary danger" data-i18n="delete"></button>
+        <span class="grow"></span>
+        <button type="button" id="fCancel" class="secondary" data-i18n="cancel"></button>
+        <button type="submit" id="fSave" data-i18n="save"></button>
+      </div>
+    </form>
+  </dialog>
 
   <footer class="foot">
     <button id="exportBtn" type="button" data-i18n="export"></button>

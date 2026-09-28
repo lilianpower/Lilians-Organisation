@@ -11,6 +11,20 @@ Ideas and Notes. Works offline and installs to the home screen like a normal app
 
 ---
 
+## Agenda
+
+- **📅 Dia:** os compromissos e tarefas do dia, por horário. Use ‹ › para mudar de dia.
+  Hoje também mostra os **atrasados** e as tarefas **sem data**.
+- **🗓️ Mês:** calendário do mês; os pontinhos mostram quantas coisas há em cada dia.
+  Toque num dia para ver a lista dele logo abaixo.
+- **🗂️ Lista:** tudo por categoria, com busca.
+- Escreva com o horário e ele é reconhecido: *reunião 14h, academia às 7, dentista amanhã 10h30*.
+  O que você escreve sem data vai para o dia que está aberto.
+- ☑️ Marque o que já fez. Toque no texto de um item para mudar dia, horário ou escrever **anotações**.
+
+*Day view (by time, with overdue and undated tasks today), Month view (calendar with dots),
+List view (by category). Times like "2pm" are detected. Tap an item to edit date, time and notes.*
+
 ## Como usar / How to use
 
 - Escreve e carrega em **Adicionar** (ou Enter). / Type and tap **Adicionar** (or Enter).

@@ -1,6 +1,6 @@
 // Service worker: guarda a app no telemóvel para abrir sem internet.
 // Sempre que mudares ficheiros da app, aumenta o número da versão abaixo.
-const CACHE = 'organizar-v2';
+const CACHE = 'organizar-v3';
 
 const FILES = [
   './',

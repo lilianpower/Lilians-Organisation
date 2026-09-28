@@ -15,6 +15,8 @@ function clean(item) {
     category: String(item.category ?? 'notas').slice(0, 32),
     done: !!item.done,
     due: Number.isFinite(item.due) ? item.due : null,
+    time: /^\d{2}:\d{2}$/.test(item.time) ? item.time : null,
+    note: String(item.note ?? '').slice(0, MAX_TEXT),
     createdAt: Number(item.createdAt) || 0,
     updatedAt: Number(item.updatedAt) || 0,
     deleted: !!item.deleted,
