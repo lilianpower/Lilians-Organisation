@@ -1,8 +1,7 @@
 {
-  "name": "Organização da Lilian",
-  "short_name": "Organização",
-  "description": "Escreve qualquer coisa e a app organiza por ti.",
-  "lang": "pt",
+  "name": "Organizar",
+  "short_name": "Organizar",
+  "description": "Escreve qualquer coisa e a app organiza por ti. / Type anything and it gets organised.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",

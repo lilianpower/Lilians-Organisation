@@ -1,6 +1,7 @@
-# Configuração do Netlify: não há nada para "construir", só publicar esta pasta.
+# Configuração do Netlify: a app está na pasta "public", o servidor de sincronização em "netlify/functions".
 [build]
-  publish = "."
+  publish = "public"
+  functions = "netlify/functions"
 
 # O service worker nunca deve ficar em cache, para as atualizações chegarem ao telemóvel.
 [[headers]]

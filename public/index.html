@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Organizar</title>
+  <meta name="description" content="Escreve qualquer coisa e a app organiza por ti.">
+  <meta name="theme-color" content="#f7f6fb" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#15141c" media="(prefers-color-scheme: dark)">
+  <meta name="color-scheme" content="light dark">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon-192.png" type="image/png">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Organizar">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="top">
+    <h1>Organizar</h1>
+    <button id="syncBtn" class="syncBtn" type="button">
+      <span id="syncIcon">🔄</span> <span id="status"></span>
+    </button>
+    <button id="installBtn" class="install" type="button" hidden data-i18n="install"></button>
+  </header>
+
+  <p id="iosHint" class="hint" hidden></p>
+
+  <section id="syncPanel" class="panel" hidden>
+    <div id="syncOff">
+      <p data-i18n="syncIntro"></p>
+      <button id="createBtn" type="button" data-i18n="createShared"></button>
+      <p class="or" data-i18n="haveCode"></p>
+      <div class="row">
+        <input id="codeInput" type="text" autocapitalize="off" autocorrect="off" spellcheck="false">
+        <button id="joinBtn" type="button" data-i18n="join"></button>
+      </div>
+    </div>
+    <div id="syncOn" hidden>
+      <p id="syncState"></p>
+      <p class="small"><span data-i18n="code"></span> <code id="codeShow"></code></p>
+      <div class="row">
+        <button id="inviteBtn" type="button" data-i18n="invite"></button>
+        <button id="leaveBtn" type="button" class="secondary" data-i18n="leave"></button>
+      </div>
+    </div>
+  </section>
+
+  <form id="addForm" class="add" autocomplete="off">
+    <textarea id="input" rows="2"></textarea>
+    <button type="submit" data-i18n="add"></button>
+  </form>
+
+  <nav id="tabs" class="tabs"></nav>
+
+  <input id="search" class="search" type="search">
+
+  <main id="list" class="list"></main>
+
+  <footer class="foot">
+    <button id="exportBtn" type="button" data-i18n="export"></button>
+    <label class="importLabel">
+      <span data-i18n="import"></span>
+      <input id="importFile" type="file" accept="application/json" hidden>
+    </label>
+    <button id="clearDoneBtn" type="button" data-i18n="clearDone"></button>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

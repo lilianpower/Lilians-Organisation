@@ -1,4 +1,4 @@
-# Organização da Lilian
+# Organizar
 
 Uma app simples para o telemóvel: escreves qualquer coisa e ela organiza sozinha em
 **Tarefas, Compromissos, Compras, Ideias e Notas**. Funciona sem internet e pode ser
@@ -40,8 +40,8 @@ O Netlify vai ler este repositório e transformá-lo num site com um link.
 5. Seleciona o repositório **Lilians-Organisation**.
 6. Em **Branch to deploy**, escolhe o branch onde está a app
    (enquanto não juntarmos ao principal é `claude/offline-app-netlify-github-xxgagr`).
-   Deixa **Build command** vazio e **Publish directory** como `.` — já está tudo no ficheiro `netlify.toml`.
-   *Pick the branch with the app; leave build command empty; publish directory `.`.*
+   Deixa o resto como está — já está tudo no ficheiro `netlify.toml`.
+   *Pick the branch with the app; leave the rest as is.*
 7. Carrega em **Deploy**. Espera ~30 segundos. Vais receber um link tipo
    `https://nome-aleatorio.netlify.app`.
    *Tap Deploy, wait ~30 seconds, you get a link.*
@@ -63,9 +63,17 @@ Depois de abrir uma vez com internet, a app funciona **sem internet**.
 
 ## Sincronização / Sync
 
-Por agora, os dados ficam guardados **no próprio telemóvel** (e o botão *Guardar cópia*
-serve de backup). A sincronização automática entre aparelhos (ou com outra pessoa) é o
-próximo passo — precisa de um pequeno "servidor", que o Netlify também oferece de graça.
+1. Na app, toca em **🔄** (canto de cima) → **Criar lista partilhada**.
+2. Toca em **Enviar convite** e manda a mensagem à outra pessoa.
+3. A outra pessoa instala a app, toca em **🔄**, cola o **código** e carrega em **Juntar**.
 
-*For now data is stored on the phone itself. Automatic sync between devices (or with
-another person) is the next step and needs a small server, which Netlify also offers for free.*
+A partir daí, o que um escreve aparece no outro. Sem internet continua a funcionar e
+junta tudo quando a ligação volta. O código funciona como uma palavra-passe: só o
+partilhes com quem deve ver a lista.
+
+*Tap 🔄 → Create shared list → Send invite. The other person installs the app, taps 🔄,
+pastes the code and taps Join. Works offline and merges when back online. The code
+works like a password — only share it with people who should see the list.*
+
+A app segue a língua do telemóvel (português ou inglês) e o modo claro/escuro.
+*The app follows the phone's language (Portuguese or English) and light/dark mode.*

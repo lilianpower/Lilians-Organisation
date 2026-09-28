@@ -1,6 +1,6 @@
 // Service worker: guarda a app no telemóvel para abrir sem internet.
 // Sempre que mudares ficheiros da app, aumenta o número da versão abaixo.
-const CACHE = 'organizacao-v1';
+const CACHE = 'organizar-v2';
 
 const FILES = [
   './',
@@ -29,7 +29,7 @@ self.addEventListener('activate', (event) => {
 // Tenta a internet primeiro (para ter sempre a versão mais recente);
 // se não houver ligação, usa a cópia guardada.
 self.addEventListener('fetch', (event) => {
-  if (event.request.method !== 'GET') return;
+  if (event.request.method !== 'GET' || new URL(event.request.url).pathname.startsWith('/api/')) return;
   event.respondWith(
     fetch(event.request)
       .then((response) => {
