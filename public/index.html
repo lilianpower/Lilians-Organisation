@@ -4,9 +4,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Organizar</title>
-  <meta name="description" content="Escreve qualquer coisa e a app organiza por ti.">
-  <meta name="theme-color" content="#f7f6fb" media="(prefers-color-scheme: light)">
-  <meta name="theme-color" content="#15141c" media="(prefers-color-scheme: dark)">
+  <meta name="description" content="Sua agenda simples: veja o mês e todos os seus compromissos.">
+  <meta name="theme-color" content="#fbf8f4" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#16141b" media="(prefers-color-scheme: dark)">
   <meta name="color-scheme" content="light dark">
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" href="icons/icon-192.png" type="image/png">
@@ -21,9 +21,9 @@
   <header class="top">
     <h1>Organizar</h1>
     <button id="syncBtn" class="syncBtn" type="button">
-      <span id="syncIcon">🔄</span> <span id="status"></span>
+      <span>🔄</span> <span id="status"></span>
     </button>
-    <button id="installBtn" class="install" type="button" hidden data-i18n="install"></button>
+    <button id="installBtn" class="pill" type="button" hidden data-i18n="install"></button>
   </header>
 
   <p id="iosHint" class="hint" hidden></p>
@@ -31,85 +31,70 @@
   <section id="syncPanel" class="panel" hidden>
     <div id="syncOff">
       <p data-i18n="syncIntro"></p>
-      <button id="createBtn" type="button" data-i18n="createShared"></button>
-      <p class="or" data-i18n="haveCode"></p>
+      <button id="createBtn" type="button" class="primary" data-i18n="createShared"></button>
+      <p class="muted" data-i18n="haveCode"></p>
       <div class="row">
         <input id="codeInput" type="text" autocapitalize="off" autocorrect="off" spellcheck="false">
-        <button id="joinBtn" type="button" data-i18n="join"></button>
+        <button id="joinBtn" type="button" class="primary" data-i18n="join"></button>
       </div>
     </div>
     <div id="syncOn" hidden>
       <p id="syncState"></p>
-      <p class="small"><span data-i18n="code"></span> <code id="codeShow"></code></p>
+      <p class="muted small"><span data-i18n="code"></span> <code id="codeShow"></code></p>
       <div class="row">
-        <button id="inviteBtn" type="button" data-i18n="invite"></button>
-        <button id="leaveBtn" type="button" class="secondary" data-i18n="leave"></button>
+        <button id="inviteBtn" type="button" class="primary" data-i18n="invite"></button>
+        <button id="leaveBtn" type="button" class="ghost" data-i18n="leave"></button>
       </div>
     </div>
+    <div class="row backup">
+      <button id="exportBtn" type="button" class="ghost" data-i18n="export"></button>
+      <label class="ghost">
+        <span data-i18n="import"></span>
+        <input id="importFile" type="file" accept="application/json" hidden>
+      </label>
+    </div>
   </section>
 
-  <nav id="views" class="views">
-    <button type="button" data-view="dia"></button>
-    <button type="button" data-view="mes"></button>
-    <button type="button" data-view="lista"></button>
-  </nav>
-
-  <form id="addForm" class="add" autocomplete="off">
-    <textarea id="input" rows="2"></textarea>
-    <button type="submit" data-i18n="add"></button>
-  </form>
-
-  <div id="dayHead" class="dayhead">
-    <button type="button" id="prevDay" class="arrow" aria-label="‹">‹</button>
-    <div class="dayTitle">
-      <strong id="dayTitle"></strong>
-      <button type="button" id="todayBtn" class="link" data-i18n="goToday"></button>
-    </div>
-    <button type="button" id="nextDay" class="arrow" aria-label="›">›</button>
-  </div>
-
-  <section id="month" class="month">
-    <div class="dayhead">
+  <section class="calendar">
+    <div class="calHead">
       <button type="button" id="prevMonth" class="arrow" aria-label="‹">‹</button>
-      <div class="dayTitle"><strong id="monthTitle"></strong></div>
+      <h2 id="monthTitle"></h2>
       <button type="button" id="nextMonth" class="arrow" aria-label="›">›</button>
     </div>
-    <div id="monthGrid" class="grid"></div>
-    <h2 id="selDayTitle" class="selDay"></h2>
+    <button type="button" id="todayBtn" class="todayBtn" data-i18n="goToday" hidden></button>
+    <div id="weekdays" class="weekdays"></div>
+    <div id="grid" class="grid"></div>
   </section>
 
-  <nav id="tabs" class="tabs"></nav>
+  <section class="agenda">
+    <div class="agendaHead">
+      <h2 id="listTitle"></h2>
+      <button type="button" id="showAllBtn" class="link" data-i18n="showAll" hidden></button>
+    </div>
+    <div id="list"></div>
+  </section>
 
-  <input id="search" class="search" type="search">
-
-  <main id="list" class="list"></main>
+  <button type="button" id="fab" class="fab" aria-label="+">+</button>
 
   <dialog id="editDlg" class="edit">
     <form method="dialog" id="editForm">
-      <label><span data-i18n="fText"></span><textarea id="fText" rows="2"></textarea></label>
+      <h3 id="fTitle"></h3>
+      <label><span data-i18n="fText"></span>
+        <input id="fText" type="text" autocomplete="off" required>
+      </label>
       <div class="row">
-        <label><span data-i18n="fDate"></span><input id="fDate" type="date"></label>
+        <label><span data-i18n="fDate"></span><input id="fDate" type="date" required></label>
         <label><span data-i18n="fTime"></span><input id="fTime" type="time"></label>
       </div>
-      <label><span data-i18n="fCat"></span><select id="fCat"></select></label>
-      <label><span data-i18n="fNote"></span><textarea id="fNote" rows="4"></textarea></label>
+      <label><span data-i18n="fNote"></span><textarea id="fNote" rows="3"></textarea></label>
       <div class="row actions">
-        <button type="button" id="fDelete" class="secondary danger" data-i18n="delete"></button>
+        <button type="button" id="fDelete" class="ghost danger" data-i18n="delete"></button>
         <span class="grow"></span>
-        <button type="button" id="fCancel" class="secondary" data-i18n="cancel"></button>
-        <button type="submit" id="fSave" data-i18n="save"></button>
+        <button type="button" id="fCancel" class="ghost" data-i18n="cancel"></button>
+        <button type="submit" class="primary" data-i18n="save"></button>
       </div>
     </form>
   </dialog>
-
-  <footer class="foot">
-    <button id="exportBtn" type="button" data-i18n="export"></button>
-    <label class="importLabel">
-      <span data-i18n="import"></span>
-      <input id="importFile" type="file" accept="application/json" hidden>
-    </label>
-    <button id="clearDoneBtn" type="button" data-i18n="clearDone"></button>
-  </footer>
 
   <script src="app.js"></script>
 </body>

@@ -13,17 +13,14 @@ Ideas and Notes. Works offline and installs to the home screen like a normal app
 
 ## Agenda
 
-- **📅 Dia:** os compromissos e tarefas do dia, por horário. Use ‹ › para mudar de dia.
-  Hoje também mostra os **atrasados** e as tarefas **sem data**.
-- **🗓️ Mês:** calendário do mês; os pontinhos mostram quantas coisas há em cada dia.
-  Toque num dia para ver a lista dele logo abaixo.
-- **🗂️ Lista:** tudo por categoria, com busca.
-- Escreva com o horário e ele é reconhecido: *reunião 14h, academia às 7, dentista amanhã 10h30*.
-  O que você escreve sem data vai para o dia que está aberto.
-- ☑️ Marque o que já fez. Toque no texto de um item para mudar dia, horário ou escrever **anotações**.
+- Ao abrir, aparece o **calendário do mês** com cada compromisso escrito no seu dia, e
+  embaixo a lista dos **próximos compromissos** com a data em destaque.
+- Toque no **+** para marcar um compromisso: o quê, dia, horário e anotações.
+- Toque num dia do calendário para ver só aquele dia. **Ver todos** volta para a lista completa.
+- ☑️ Marque o que já fez. Toque num compromisso para mudar ou apagar.
 
-*Day view (by time, with overdue and undated tasks today), Month view (calendar with dots),
-List view (by category). Times like "2pm" are detected. Tap an item to edit date, time and notes.*
+*Opens on a month calendar with each appointment written on its day, plus an upcoming
+list with big date badges. Tap + to add, tap a day to see it, tap an entry to edit.*
 
 ## Como usar / How to use
 
